@@ -26,33 +26,33 @@ int main(int argc, char *argv[]) {
   struct sockaddr_in server;
   server.sin_family = AF_INET;
   if (argc == 4){
-	  int port = atoi(argv[3]);
-	  if (port <= 0 || port > 65535){
-		  fprintf(stderr, "finger: Invalid port number\n" );
-		  return 1;
-	  } 
-	  else{
-		  server.sin_port = (unsigned short)port;
-	  }
+      unsigned long port = (unsigned int) strtoul(argv[3], NULL, 0);
+      printf("port %lu \n", port);
+      if (port <= 0 || port > 65535) {
+          fprintf(stderr, "finger: Invalid port number\n");
+          return 1;
+      } else {
+          server.sin_port = htons((unsigned short) port);
+      }
   } else {
-	  server.sin_port = htons(79);
+      server.sin_port = htons(79);
   }
 
-  struct hostent *hostentry;
-  if ( (hostentry = gethostbyname(argv[1])) == NULL){ // get address from url 
-	  fprintf(stderr, "finger: Couldn't get address | gethostbyname: %s\n", strerror(errno));
-	  return 1;
-  }
-  server.sin_addr = *(struct in_addr *)hostentry->h_addr_list[0];
+    struct hostent *hostentry;
+    if ((hostentry = gethostbyname(argv[1])) == NULL) { // get address from url
+        fprintf(stderr, "finger: Couldn't get address | gethostbyname: %s\n", strerror(errno));
+        return 1;
+    }
+    server.sin_addr = *(struct in_addr *) hostentry->h_addr_list[0];
 
-  if (connect(socket_desc, (struct sockaddr *)&server, sizeof(server))) {
-	fprintf(stderr, "finger: Couldn't open socket | connect: %s\n", strerror(errno));
-    return 1;
-  }
+    if (connect(socket_desc, (struct sockaddr *) &server, sizeof(server))) {
+        fprintf(stderr, "finger: Couldn't open socket | connect: %s\n", strerror(errno));
+        return 1;
+    }
 
-  /* write name to remote socket &
-	 write CRLF to indicate end of input */
-  char* url;
+    /* write name to remote socket &
+       write CRLF to indicate end of input */
+    char *url;
   if (argc < 3){
 	  url = "" ;
   } else {
@@ -67,7 +67,6 @@ int main(int argc, char *argv[]) {
 
   register FILE *remote;
   register int c;
-
 
   remote = fdopen(socket_desc, "r"); // open remote to read data
   if (!remote){

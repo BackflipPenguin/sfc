@@ -1,7 +1,7 @@
 * sfc: simple finger client
 ** to compile
 #+begin_src bash
-gcc sfc.c -O2 -std=c11 -Wall -pedantic
+gcc sfc.c -O2 -std=c11 -Wall -pedantic -o sfc
 #+end_src
 ** usage
 #+begin_src bash

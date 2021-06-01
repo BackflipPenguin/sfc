@@ -1,0 +1,11 @@
+* sfc: simple finger client
+** to compile
+#+begin_src bash
+gcc sfc.c -O2 -std=c11 -Wall -pedantic
+#+end_src
+** usage
+#+begin_src bash
+sfc [address or url] [user](optional) [port](optional)
+#+end_src
+
+
